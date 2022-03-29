@@ -1,0 +1,12 @@
+$DC = (Get-ADDomain).PDCEmulator
+$Func = Get-WinEvent -ComputerName $DC -FilterHashtable @{
+    LogName = 'Security'
+    ID = 4740
+}
+foreach ($Loop in $Func){
+    [pscustomobject]@{
+        UserName = $Loop.Properties[0].Value
+        Computer = $Loop.Properties[1].Value
+        TimeStamp = $Loop.TimeCreated
+    }
+}
